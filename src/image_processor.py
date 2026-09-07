@@ -3,10 +3,12 @@ from pathlib import Path
 
 class ImageProcessor:
 
-    def __init__(self, blur_kernel=(5, 5), block_size=11, c=2):
+    def __init__(self, blur_kernel=(5, 5), block_size=11, c=2, canny_threshold1=50, canny_threshold2=150):
         self.blur_kernel = blur_kernel
         self.block_size = block_size
         self.c = c
+        self.canny_threshold1 = canny_threshold1
+        self.canny_threshold2 = canny_threshold2
 
     def _list_images(self, directory):
         directory = Path(directory)
@@ -77,3 +79,14 @@ class ImageProcessor:
         except Exception as e:
             print(f"[Erro] Falha ao aplicar limiarização: {e}")
             return None
+
+    def _detect_edges(self, image):
+        try:
+            edges = cv.Canny(image, self.canny_threshold1, self.canny_threshold2)
+            return edges
+
+        except Exception as e:
+            print(f"[Erro] Falha ao detectar bordas: {e}")
+            return None
+
+    
