@@ -30,5 +30,16 @@ class ImageProcessor:
             return None
 
         except Exception as e:
-            print(f"[Erro de I/O na leitura]: {e}")
+            print(f"[Erro] Falha ao ler a imagem: {e}")
             return None
+
+    def _to_grayscale(self, image):
+        try:
+            gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+            return gray
+
+        except Exception as e:
+            print(f"[Erro] Falha na conversão para escala de cinza: {e}")
+            return None
+
+    
