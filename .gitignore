@@ -1,3 +1,7 @@
+.venv
+data/
+test_batch.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
