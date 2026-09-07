@@ -3,8 +3,10 @@ from pathlib import Path
 
 class ImageProcessor:
 
-    def __init__(self, blur_kernel=(5, 5)):
+    def __init__(self, blur_kernel=(5, 5), block_size=11, c=2):
         self.blur_kernel = blur_kernel
+        self.block_size = block_size
+        self.c = c
 
     def _list_images(self, directory):
         directory = Path(directory)
@@ -60,4 +62,18 @@ class ImageProcessor:
             print(f"[Erro] Falha ao aplicar suavização: {e}")
             return None
 
-    
+    def _apply_threshold(self, image):
+        try:
+            thresholded= cv.adaptiveThreshold(
+                image,
+                255,
+                cv.ADAPTIVE_THRESH_GAUSSIAN_C,
+                cv.THRESH_BINARY,
+                self.block_size,
+                self.c
+            )
+            return thresholded
+
+        except Exception as e:
+            print(f"[Erro] Falha ao aplicar limiarização: {e}")
+            return None
