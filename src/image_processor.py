@@ -5,13 +5,14 @@ from pathlib import Path
 class ImageProcessor:
 
     def __init__(self, blur_kernel=(5, 5), block_size=11, c=2, canny_threshold1=50, canny_threshold2=150, 
-                 morphology_kernel=(3, 3)):
+                 morphology_kernel=(3, 3), resize_size=(256, 256)):
         self.blur_kernel = blur_kernel
         self.block_size = block_size
         self.c = c
         self.canny_threshold1 = canny_threshold1
         self.canny_threshold2 = canny_threshold2
         self.morphology_kernel = morphology_kernel
+        self.resize_size = resize_size
 
     def _list_images(self, directory):
         directory = Path(directory)
@@ -102,4 +103,13 @@ class ImageProcessor:
             print(f"[Erro] Falha ao aplicar morfologia: {e}")
             return None
 
-        
+    def _resize(self, image):
+        try:
+            resized = cv.resize(image, self.resize_size)
+            return resized
+
+        except Exception as e:
+            print(f"[Erro] Falha ao redimensionar imagem: {e}")
+            return None
+
+    
