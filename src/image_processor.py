@@ -112,4 +112,47 @@ class ImageProcessor:
             print(f"[Erro] Falha ao redimensionar imagem: {e}")
             return None
 
-    
+    def _preprocess_image(self, input_path):
+        image = self._read_image(input_path)
+        if image is None:
+            return None, None
+
+        resized = self._resize(image)
+        if resized is None:
+            return None, None
+
+        gray = self._to_grayscale(resized)
+        if gray is None:
+            return None, None
+
+        blurred = self._apply_blur(gray)
+        if blurred is None:
+            return None, None
+
+        thresholded = self._apply_threshold(blurred)
+        if thresholded is None:
+            return None, None
+
+        closing = self._apply_morphology(thresholded)
+        if closing is None:
+            return None, None
+
+        edges = self._detect_edges(blurred)
+        if edges is None:
+            return None, None
+
+        return closing, edges
+
+    def _save_image(self, image, path):
+        try: 
+            sucess = cv.imwrite(str(path), image)
+
+            if not sucess:
+                print(f"[Erro] Não foi possível salvar a imagem: {path}")
+
+            return sucess
+
+        except Exception as e:
+            print(f"[Erro] Falha ao salvar imagem: {e}")
+            return False
+        
